@@ -1,6 +1,9 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 
 # Тут описываем свою модель пользователя
@@ -110,6 +113,7 @@ class Order(models.Model):
 class Catalog(models.Model):
     name = models.CharField('Название', max_length=50, default='На чаепитие')
     image = models.ImageField('Изображение', upload_to='media/catalog/', default='media/BakeCakeImages/no_image.png')
+    slug = models.SlugField('Slug', max_length=100, unique=True, default=uuid.uuid4)
 
     class Meta:
         verbose_name = 'Каталог'
@@ -117,3 +121,7 @@ class Catalog(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Catalog, self).save(*args, **kwargs)

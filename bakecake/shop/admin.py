@@ -42,4 +42,6 @@ class BakeCakeAdmin(admin.ModelAdmin):
 
 @admin.register(Catalog)
 class CatalogAdmin(admin.ModelAdmin):
-    ...
+    list_display = ('name', 'slug')
+
+    readonly_fields = ('slug', )
